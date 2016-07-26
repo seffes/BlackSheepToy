@@ -2,8 +2,6 @@ package kmutnb.ratchaphol.natthawut.natdanai.blacksheeptoy;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -14,11 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
 import org.jibble.simpleftp.SimpleFTP;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 
 public class InsertProduct extends AppCompatActivity implements View.OnClickListener {
@@ -30,13 +28,12 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
             11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
     private String[] nameImageStrings = new String[32];
     private String[] pathImageStrings = new String[32];
-    private EditText nameEditText, brandEditText, priceEditText, stockEditText,
-            vatEditText, shippingEditText, detailEditText;
-
+    private EditText nameEditText, brandEditText, priceEditText, stockEditText, vatEditText,
+            shippingEditText, detailEditText;
     private String nameString, brandString, priceString, stockString, vatString,
             shippingString, detailString;
-
     private boolean statusImageABoolean = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,29 +71,33 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
         super.onActivityResult(requestCode, resultCode, data);
 
         int intIndex = requestCode;
-        Log.d("26JulyV1", "Index ==>" + intIndex);
+        Log.d("26JulyV1", "Index ==> " + intIndex);
 
         if ((requestCode == pickImageINTS[intIndex]) && (resultCode == RESULT_OK)) {
 
             String strImagePath = findPath(data.getData());
             Log.d("26JulyV1", "ImagePath = " + strImagePath);
-            pathImageStrings[intIndex] = strImagePath;
-            nameImageStrings[intIndex] = strImagePath.substring(strImagePath.lastIndexOf("/") + 1);
-            Log.d("26JulyV1", "name =" + nameImageStrings[intIndex]);
 
-            //Show Choose Image
+            nameImageStrings[intIndex] = strImagePath.substring(strImagePath.lastIndexOf("/") + 1);
+            Log.d("26JulyV1", "nameImage ==> " + nameImageStrings[intIndex]);
+            pathImageStrings[intIndex] = "http://swiftcodingthai.com/sheep/image/" + nameImageStrings[intIndex];
+
+            upLoadImageToServer(strImagePath);
+
+            // Show Choose Image
             try {
 
-                Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(data.getData()));
-                productImageViews[intIndex].setImageBitmap(bitmap);
+//                Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(data.getData()));
+//                productImageViews[intIndex].setImageBitmap(bitmap);
 
+                Picasso.with(this).
+                        load(pathImageStrings[intIndex]).
+                        resize(120,120).
+                        into(productImageViews[intIndex]);
 
             } catch (Exception e) {
-
-                Log.d("26JulyV1", "e==>" + e.toString());
-
-
-            }//try
+                Log.d("26JulyV1", "e ==> " + e.toString());
+            }   // try
 
         }   // if
 
@@ -208,28 +209,33 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
         shippingString = shippingEditText.getText().toString().trim();
         detailString = detailEditText.getText().toString().trim();
 
-        //CheckSpace
-        if (nameString.equals("") || brandString.equals("") || priceString.equals("") ||
-                stockString.equals("") || vatString.equals("") || shippingString.equals("") ||
+        //Check Space
+        if (nameString.equals("") || brandString.equals("") ||
+                priceString.equals("") || stockString.equals("") ||
+                vatString.equals("") || shippingString.equals("") ||
                 detailString.equals("")) {
 
             //Have Space
             MyAlertDialog myAlertDialog = new MyAlertDialog();
-            myAlertDialog.myDialog(this, R.drawable.icon_myaccount, "Have Space","Please fill All");
-        }else if (checkChooseImage()) {
+            myAlertDialog.myDialog(this, R.drawable.icon_myaccount, "Have Space",
+                    "Please Fill All Every Blank");
+
+        } else if (checkChooseImage()) {
             //Complete Image
-            upLoadImageToServer();
+            // upLoadImageToServer();
+
 
         } else {
-            //Not Choose All Image
+            // Not Choose Image Some
             MyAlertDialog myAlertDialog = new MyAlertDialog();
-            myAlertDialog.myDialog(this, R.drawable.icon_myaccount, "Want IMAGE","Please Choose All Image");
+            myAlertDialog.myDialog(this, R.drawable.icon_myaccount, "Not Choose Image",
+                    "Please Choose Image all");
         }
 
 
-    }// clickInsert
+    }   // clickInsert
 
-    private void upLoadImageToServer() {
+    private void upLoadImageToServer(String strPathImage) {
 
         try {
 
@@ -237,28 +243,29 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
             simpleFTP.connect("ftp.swiftcodingthai.com", 21, "sheep@swiftcodingthai.com", "Abc12345");
             simpleFTP.bin();
             simpleFTP.cwd("image");
-            simpleFTP.stor(new File(pathImageStrings[0]));
+            simpleFTP.stor(new File(strPathImage));
             simpleFTP.disconnect();
 
 
         } catch (Exception e) {
-            Log.d("26JulyV2", "e upload" + e.toString());
+            Log.d("26JulyV1", "e upload ==> " + e.toString());
         }
 
-    }//upload img
+    }   // upLoadImage
 
     private boolean checkChooseImage() {
+
         boolean result = true;
 
-        //for (int i = 0; i < nameImageStrings.length; i += 1) { //ต้นฉบับ
+        // for (int i=0;i<nameImageStrings.length;i+=1) {  // นี่คือต้นฉบับ
 
-        for (int i = 0; i < 3; i += 1) {
-            if (nameImageStrings[i] == null) {
-                return false; // Have null
-            }//if
-        }//for
+        for (int i=0;i<1;i+=1) {
+            if (nameImageStrings[i] == null ) {
+                return false; // Have null on String
+            }   //if
+        }   // for
 
-        Log.d("26JulyV1", "Result ChooseImage ==" + result);
+        Log.d("26JulyV1", "Result ChooseImage ==> " + result);
 
         return result;
     }
