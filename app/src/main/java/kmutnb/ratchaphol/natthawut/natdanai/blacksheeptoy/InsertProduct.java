@@ -64,18 +64,18 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
         int intIndex = requestCode;
         Log.d("26JulyV1", "Index ==>" + intIndex);
 
-        if ((requestCode == pickImageINTS[0]) && (resultCode == RESULT_OK)) {
+        if ((requestCode == pickImageINTS[intIndex]) && (resultCode == RESULT_OK)) {
 
             String strImagePath = findPath(data.getData());
             Log.d("26JulyV1", "ImagePath = " + strImagePath);
-            nameImageStrings[0] = strImagePath.substring(strImagePath.lastIndexOf("/") + 1);
-            Log.d("26JulyV1", "name =" + nameImageStrings[0]);
+            nameImageStrings[intIndex] = strImagePath.substring(strImagePath.lastIndexOf("/") + 1);
+            Log.d("26JulyV1", "name =" + nameImageStrings[intIndex]);
 
             //Show Choose Image
             try {
 
                 Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(data.getData()));
-                productImageViews[0].setImageBitmap(bitmap);
+                productImageViews[intIndex].setImageBitmap(bitmap);
 
 
             } catch (Exception e) {
