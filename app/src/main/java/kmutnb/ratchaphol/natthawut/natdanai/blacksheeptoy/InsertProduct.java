@@ -1,20 +1,24 @@
 package kmutnb.ratchaphol.natthawut.natdanai.blacksheeptoy;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
 
 public class InsertProduct extends AppCompatActivity implements View.OnClickListener {
 
     //Explicit
     private ImageView[] productImageViews;
     private Button[] productButtons;
-    private static final int[] pickImageINTS = new int[]{0,1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
-            12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
+    private static final int[] pickImageINTS = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +31,25 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
         //Button Controller
         buttonController();
 
-    } //Main Metrod
+    }   // Main Method
+
+    private String findPath(Uri uri) {
+        String imagePath;
+
+        String[] columns = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri, columns, null, null, null);
+
+        if (cursor != null) { // case gallery
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            imagePath = cursor.getString(columnIndex);
+        } else { // case another app
+            imagePath = uri.getPath();
+
+        }
+        return imagePath;
+
+    }   // findPath
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -35,12 +57,15 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
 
         if ((requestCode == pickImageINTS[0]) && (resultCode == RESULT_OK)) {
 
-            Log.d("26July1", "button 1 ok");
+            String strImagePath = findPath(data.getData());
+            Log.d("26JulyV1", "ImagePath = " + strImagePath);
+
+        }   // if
 
 
-        }//if
 
-    }//onActivityResult
+
+    }   // onActivityResult
 
     private void buttonController() {
 
@@ -48,9 +73,9 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
 
             productButtons[i].setOnClickListener(this);
 
-        } //for
+        }   //for
 
-    } //Button Controller
+    }   // buttonController
 
     private void bindWidget() {
 
@@ -85,7 +110,7 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
         productImageViews[27] = (ImageView) findViewById(R.id.imageView32);
         productImageViews[28] = (ImageView) findViewById(R.id.imageView33);
         productImageViews[29] = (ImageView) findViewById(R.id.imageView34);
-        productImageViews[30] = (ImageView) findViewById(R.id.imageView35);
+        productImageViews[30] = (ImageView) findViewById(R.id.imageView34);
         productImageViews[31] = (ImageView) findViewById(R.id.imageView36);
 
         productButtons = new Button[32];
@@ -122,13 +147,12 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
         productButtons[30] = (Button) findViewById(R.id.button65);
         productButtons[31] = (Button) findViewById(R.id.button66);
 
-
-    } //bindWidget
+    }   // bindWidget
 
     public void clickCancleInsert(View view) {
         finish();
 
-    } //clickCancel
+    }   // clickCancel
 
     @Override
     public void onClick(View view) {
@@ -140,7 +164,10 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
 
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent,"Select Picture"),pickImageINTS[0]);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"),
+                        pickImageINTS[0]);
+
+
                 break;
             case R.id.button18:
                 Log.d("26JulyV1", "Click Button 2");
@@ -236,7 +263,8 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
                 Log.d("26JulyV1", "Click Button 32");
                 break;
 
-        }
+        }   // switch
 
-    } //OnClick
-} //Main Class
+    }   // onClick
+
+}   // Main Class
