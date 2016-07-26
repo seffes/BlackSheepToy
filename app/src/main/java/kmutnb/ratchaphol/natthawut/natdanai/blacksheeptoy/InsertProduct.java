@@ -14,6 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import org.jibble.simpleftp.SimpleFTP;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -26,6 +29,7 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
     private static final int[] pickImageINTS = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
             11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
     private String[] nameImageStrings = new String[32];
+    private String[] pathImageStrings = new String[32];
     private EditText nameEditText, brandEditText, priceEditText, stockEditText,
             vatEditText, shippingEditText, detailEditText;
 
@@ -76,6 +80,7 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
 
             String strImagePath = findPath(data.getData());
             Log.d("26JulyV1", "ImagePath = " + strImagePath);
+            pathImageStrings[intIndex] = strImagePath;
             nameImageStrings[intIndex] = strImagePath.substring(strImagePath.lastIndexOf("/") + 1);
             Log.d("26JulyV1", "name =" + nameImageStrings[intIndex]);
 
@@ -213,6 +218,8 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
             myAlertDialog.myDialog(this, R.drawable.icon_myaccount, "Have Space","Please fill All");
         }else if (checkChooseImage()) {
             //Complete Image
+            upLoadImageToServer();
+
         } else {
             //Not Choose All Image
             MyAlertDialog myAlertDialog = new MyAlertDialog();
@@ -221,6 +228,24 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
 
 
     }// clickInsert
+
+    private void upLoadImageToServer() {
+
+        try {
+
+            SimpleFTP simpleFTP = new SimpleFTP();
+            simpleFTP.connect("ftp.swiftcodingthai.com", 21, "sheep@swiftcodingthai.com", "Abc12345");
+            simpleFTP.bin();
+            simpleFTP.cwd("image");
+            simpleFTP.stor(new File(pathImageStrings[0]));
+            simpleFTP.disconnect();
+
+
+        } catch (Exception e) {
+            Log.d("26JulyV2", "e upload" + e.toString());
+        }
+
+    }//upload img
 
     private boolean checkChooseImage() {
         boolean result = true;
