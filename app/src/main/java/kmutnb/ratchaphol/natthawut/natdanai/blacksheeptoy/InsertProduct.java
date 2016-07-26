@@ -60,6 +60,37 @@ public class InsertProduct extends AppCompatActivity {
 
         productButtons = new Button[32];
         productButtons[0] = (Button) findViewById(R.id.button36);
+        productButtons[1] = (Button) findViewById(R.id.button18);
+        productButtons[2] = (Button) findViewById(R.id.button37);
+        productButtons[3] = (Button) findViewById(R.id.button38);
+        productButtons[4] = (Button) findViewById(R.id.button39);
+        productButtons[5] = (Button) findViewById(R.id.button40);
+        productButtons[6] = (Button) findViewById(R.id.button41);
+        productButtons[7] = (Button) findViewById(R.id.button42);
+        productButtons[8] = (Button) findViewById(R.id.button43);
+        productButtons[9] = (Button) findViewById(R.id.button44);
+        productButtons[10] = (Button) findViewById(R.id.button45);
+        productButtons[11] = (Button) findViewById(R.id.button46);
+        productButtons[12] = (Button) findViewById(R.id.button47);
+        productButtons[13] = (Button) findViewById(R.id.button48);
+        productButtons[14] = (Button) findViewById(R.id.button49);
+        productButtons[15] = (Button) findViewById(R.id.button50);
+        productButtons[16] = (Button) findViewById(R.id.button51);
+        productButtons[17] = (Button) findViewById(R.id.button52);
+        productButtons[18] = (Button) findViewById(R.id.button53);
+        productButtons[19] = (Button) findViewById(R.id.button54);
+        productButtons[20] = (Button) findViewById(R.id.button55);
+        productButtons[21] = (Button) findViewById(R.id.button56);
+        productButtons[22] = (Button) findViewById(R.id.button57);
+        productButtons[23] = (Button) findViewById(R.id.button58);
+        productButtons[24] = (Button) findViewById(R.id.button59);
+        productButtons[25] = (Button) findViewById(R.id.button60);
+        productButtons[26] = (Button) findViewById(R.id.button61);
+        productButtons[27] = (Button) findViewById(R.id.button62);
+        productButtons[28] = (Button) findViewById(R.id.button63);
+        productButtons[29] = (Button) findViewById(R.id.button64);
+        productButtons[30] = (Button) findViewById(R.id.button65);
+        productButtons[31] = (Button) findViewById(R.id.button66);
 
 
     } //bindWidget
