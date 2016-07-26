@@ -2,6 +2,8 @@ package kmutnb.ratchaphol.natthawut.natdanai.blacksheeptoy;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -10,6 +12,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 
 public class InsertProduct extends AppCompatActivity implements View.OnClickListener {
@@ -62,6 +67,20 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
             Log.d("26JulyV1", "ImagePath = " + strImagePath);
             nameImageStrings[0] = strImagePath.substring(strImagePath.lastIndexOf("/") + 1);
             Log.d("26JulyV1", "name =" + nameImageStrings[0]);
+
+            //Show Choose Image
+            try {
+
+                Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(data.getData()));
+                productImageViews[0].setImageBitmap(bitmap);
+
+
+            } catch (Exception e) {
+
+                Log.d("26JulyV1", "e==>" + e.toString());
+
+
+            }//try
 
         }   // if
 
