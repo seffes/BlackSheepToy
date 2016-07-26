@@ -2,11 +2,12 @@ package kmutnb.ratchaphol.natthawut.natdanai.blacksheeptoy;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-public class InsertProduct extends AppCompatActivity {
+public class InsertProduct extends AppCompatActivity implements View.OnClickListener {
 
     //Explicit
     private ImageView[] productImageViews;
@@ -20,7 +21,20 @@ public class InsertProduct extends AppCompatActivity {
         //BindWidget
         bindWidget();
 
+        //Button Controller
+        buttonController();
+
     } //Main Metrod
+
+    private void buttonController() {
+
+        for (int i = 0; i < productButtons.length; i += 1) {
+
+            productButtons[i].setOnClickListener(this);
+
+        } //for
+
+    } //Button Controller
 
     private void bindWidget() {
 
@@ -99,4 +113,110 @@ public class InsertProduct extends AppCompatActivity {
         finish();
 
     } //clickCancel
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+
+            case R.id.button36:
+                Log.d("26JulyV1", "Click Button 1");
+                break;
+            case R.id.button18:
+                Log.d("26JulyV1", "Click Button 2");
+                break;
+            case R.id.button37:
+                Log.d("26JulyV1", "Click Button 3");
+                break;
+            case R.id.button38:
+                Log.d("26JulyV1", "Click Button 4");
+                break;
+            case R.id.button39:
+                Log.d("26JulyV1", "Click Button 5");
+                break;
+            case R.id.button40:
+                Log.d("26JulyV1", "Click Button 6");
+                break;
+            case R.id.button41:
+                Log.d("26JulyV1", "Click Button 7");
+                break;
+            case R.id.button42:
+                Log.d("26JulyV1", "Click Button 8");
+                break;
+            case R.id.button43:
+                Log.d("26JulyV1", "Click Button 9");
+                break;
+            case R.id.button44:
+                Log.d("26JulyV1", "Click Button 10");
+                break;
+            case R.id.button45:
+                Log.d("26JulyV1", "Click Button 11");
+                break;
+            case R.id.button46:
+                Log.d("26JulyV1", "Click Button 12");
+                break;
+            case R.id.button47:
+                Log.d("26JulyV1", "Click Button 13");
+                break;
+            case R.id.button48:
+                Log.d("26JulyV1", "Click Button 14");
+                break;
+            case R.id.button49:
+                Log.d("26JulyV1", "Click Button 15");
+                break;
+            case R.id.button50:
+                Log.d("26JulyV1", "Click Button 16");
+                break;
+            case R.id.button51:
+                Log.d("26JulyV1", "Click Button 17");
+                break;
+            case R.id.button52:
+                Log.d("26JulyV1", "Click Button 18");
+                break;
+            case R.id.button53:
+                Log.d("26JulyV1", "Click Button 19");
+                break;
+            case R.id.button54:
+                Log.d("26JulyV1", "Click Button 20");
+                break;
+            case R.id.button55:
+                Log.d("26JulyV1", "Click Button 21");
+                break;
+            case R.id.button56:
+                Log.d("26JulyV1", "Click Button 22");
+                break;
+            case R.id.button57:
+                Log.d("26JulyV1", "Click Button 23");
+                break;
+            case R.id.button58:
+                Log.d("26JulyV1", "Click Button 24");
+                break;
+            case R.id.button59:
+                Log.d("26JulyV1", "Click Button 25");
+                break;
+            case R.id.button60:
+                Log.d("26JulyV1", "Click Button 26");
+                break;
+            case R.id.button61:
+                Log.d("26JulyV1", "Click Button 27");
+                break;
+            case R.id.button62:
+                Log.d("26JulyV1", "Click Button 28");
+                break;
+            case R.id.button63:
+                Log.d("26JulyV1", "Click Button 29");
+                break;
+            case R.id.button64:
+                Log.d("26JulyV1", "Click Button 30");
+                break;
+            case R.id.button65:
+                Log.d("26JulyV1", "Click Button 31");
+                break;
+            case R.id.button66:
+                Log.d("26JulyV1", "Click Button 32");
+                break;
+
+        }
+
+    } //OnClick
 } //Main Class
