@@ -211,10 +211,32 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
             //Have Space
             MyAlertDialog myAlertDialog = new MyAlertDialog();
             myAlertDialog.myDialog(this, R.drawable.icon_myaccount, "Have Space","Please fill All");
-        }//if
+        }else if (checkChooseImage()) {
+            //Complete Image
+        } else {
+            //Not Choose All Image
+            MyAlertDialog myAlertDialog = new MyAlertDialog();
+            myAlertDialog.myDialog(this, R.drawable.icon_myaccount, "Want IMAGE","Please Choose All Image");
+        }
 
 
     }// clickInsert
+
+    private boolean checkChooseImage() {
+        boolean result = true;
+
+        //for (int i = 0; i < nameImageStrings.length; i += 1) { //ต้นฉบับ
+
+        for (int i = 0; i < 3; i += 1) {
+            if (nameImageStrings[i] == null) {
+                return false; // Have null
+            }//if
+        }//for
+
+        Log.d("26JulyV1", "Result ChooseImage ==" + result);
+
+        return result;
+    }
 
     @Override
     public void onClick(View view) {
