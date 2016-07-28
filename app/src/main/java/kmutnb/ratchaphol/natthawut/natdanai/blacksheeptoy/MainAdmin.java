@@ -29,4 +29,8 @@ public class MainAdmin extends AppCompatActivity {
     public void clickOrder(View view) {
         startActivity(new Intent(MainAdmin.this, OrderAdmin.class));
     }
+
+    public void clickLogIn(View view) {
+        startActivity(new Intent(MainAdmin.this, MainActivity.class));
+    }
 }

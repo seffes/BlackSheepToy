@@ -1,5 +1,8 @@
 package kmutnb.ratchaphol.natthawut.natdanai.blacksheeptoy;
 
+import android.app.AlertDialog;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,12 +14,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 import com.squareup.picasso.Picasso;
 
 import org.jibble.simpleftp.SimpleFTP;
 
 import java.io.File;
+import java.io.IOException;
 
 
 public class InsertProduct extends AppCompatActivity implements View.OnClickListener {
@@ -29,9 +41,9 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
     private String[] nameImageStrings = new String[32];
     private String[] pathImageStrings = new String[32];
     private EditText nameEditText, brandEditText, priceEditText, stockEditText, vatEditText,
-            shippingEditText, detailEditText;
+            shippingEditText, detailEditText, usedEditText;
     private String nameString, brandString, priceString, stockString, vatString,
-            shippingString, detailString;
+            shippingString, detailString, usedString;
     private boolean statusImageABoolean = true;
 
 
@@ -92,7 +104,7 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
 
                 Picasso.with(this).
                         load(pathImageStrings[intIndex]).
-                        resize(120,120).
+                        resize(120, 120).
                         into(productImageViews[intIndex]);
 
             } catch (Exception e) {
@@ -147,7 +159,7 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
         productImageViews[27] = (ImageView) findViewById(R.id.imageView32);
         productImageViews[28] = (ImageView) findViewById(R.id.imageView33);
         productImageViews[29] = (ImageView) findViewById(R.id.imageView34);
-        productImageViews[30] = (ImageView) findViewById(R.id.imageView34);
+        productImageViews[30] = (ImageView) findViewById(R.id.imageView35);
         productImageViews[31] = (ImageView) findViewById(R.id.imageView36);
 
         productButtons = new Button[32];
@@ -191,20 +203,47 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
         vatEditText = (EditText) findViewById(R.id.editText17);
         shippingEditText = (EditText) findViewById(R.id.editText18);
         detailEditText = (EditText) findViewById(R.id.editText16);
+        usedEditText = (EditText) findViewById(R.id.editText26);
 
     }   // bindWidget
 
     public void clickCancelInsert(View view) {
-        finish();
+        AlertDialog.Builder confirmcancel = new AlertDialog.Builder(InsertProduct.this);
+        confirmcancel.setTitle("ต้องการยกเลิกใช่ไหม");
+        confirmcancel.setIcon(R.drawable.danger);
+        confirmcancel.setMessage("ต้องการยกเลิกใช่ไหม");
+        confirmcancel.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                finish();
+            }
+        });
+
+        confirmcancel.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        confirmcancel.show();
+
+
+
 
     }   // clickCancel
 
+
     public void clickInsert(View view) {
+
+
+
 
         nameString = nameEditText.getText().toString().trim();
         brandString = brandEditText.getText().toString().trim();
         priceString = priceEditText.getText().toString().trim();
         stockString = stockEditText.getText().toString().trim();
+        usedString = usedEditText.getText().toString().trim();
         vatString = vatEditText.getText().toString().trim();
         shippingString = shippingEditText.getText().toString().trim();
         detailString = detailEditText.getText().toString().trim();
@@ -213,23 +252,59 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
         if (nameString.equals("") || brandString.equals("") ||
                 priceString.equals("") || stockString.equals("") ||
                 vatString.equals("") || shippingString.equals("") ||
-                detailString.equals("")) {
+                detailString.equals("") || usedString.equals("")) {
 
             //Have Space
             MyAlertDialog myAlertDialog = new MyAlertDialog();
-            myAlertDialog.myDialog(this, R.drawable.icon_myaccount, "Have Space",
-                    "Please Fill All Every Blank");
+            myAlertDialog.myDialog(this, R.drawable.icon_myaccount, "กรอกไม่ครบ",
+                    "กรุณากรอกให้ครบ");
 
         } else if (checkChooseImage()) {
             //Complete Image
-            // upLoadImageToServer();
+            AlertDialog.Builder confirmcancel = new AlertDialog.Builder(InsertProduct.this);
+            confirmcancel.setTitle("ต้องการเพิ่มสินค้าใช่ไหม?");
+            confirmcancel.setIcon(R.drawable.danger);
+            confirmcancel.setMessage("ต้องการเพิ่ม" +nameString +"ใช่ไหม?");
+            confirmcancel.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    uploadToServer();
+                    MyManage myManage = new MyManage(InsertProduct.this);
+                    myManage.addProduct(nameString, brandString, priceString, stockString,
+                            usedString, vatString, shippingString, detailString,
+                            pathImageStrings[0], pathImageStrings[1], pathImageStrings[2],
+                            pathImageStrings[3], pathImageStrings[4], pathImageStrings[5],
+                            pathImageStrings[6], pathImageStrings[7], pathImageStrings[8],
+                            pathImageStrings[9], pathImageStrings[10], pathImageStrings[11],
+                            pathImageStrings[12], pathImageStrings[13], pathImageStrings[14],
+                            pathImageStrings[15], pathImageStrings[16], pathImageStrings[17],
+                            pathImageStrings[18], pathImageStrings[19], pathImageStrings[20],
+                            pathImageStrings[21], pathImageStrings[22], pathImageStrings[23],
+                            pathImageStrings[24], pathImageStrings[25], pathImageStrings[26],
+                            pathImageStrings[27], pathImageStrings[28], pathImageStrings[29],
+                            pathImageStrings[30], pathImageStrings[31]);
+
+                    Toast.makeText(InsertProduct.this, "เพิ่ม " + nameString + " แล้ว", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(InsertProduct.this, ProductAdmin.class));
+
+                }
+            });
+
+            confirmcancel.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            confirmcancel.show();
 
 
         } else {
             // Not Choose Image Some
             MyAlertDialog myAlertDialog = new MyAlertDialog();
-            myAlertDialog.myDialog(this, R.drawable.icon_myaccount, "Not Choose Image",
-                    "Please Choose Image all");
+            myAlertDialog.myDialog(this, R.drawable.danger, "รูปไม่ครบ",
+                    "กรุณาใส่รูปให้ครบด้วย");
         }
 
 
@@ -259,8 +334,8 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
 
         // for (int i=0;i<nameImageStrings.length;i+=1) {  // นี่คือต้นฉบับ
 
-        for (int i=0;i<1;i+=1) {
-            if (nameImageStrings[i] == null ) {
+        for (int i = 0; i < nameImageStrings.length; i += 1) {
+            if (nameImageStrings[i] == null) {
                 return false; // Have null on String
             }   //if
         }   // for
@@ -550,5 +625,70 @@ public class InsertProduct extends AppCompatActivity implements View.OnClickList
         }   // switch
 
     }   // onClick
+
+    private void uploadToServer() {
+        String strURL = "http://swiftcodingthai.com/sheep/php_add_product.php";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody requestBody = new FormEncodingBuilder()
+                .add("isAdd", "true")
+                .add("Name", nameString)
+                .add("Brand", brandString)
+                .add("Price", priceString)
+                .add("Stock", stockString)
+                .add("Used", usedString)
+                .add("Vat", vatString)
+                .add("Shipping", shippingString)
+                .add("Detail", detailString)
+                .add("Image1", pathImageStrings[0])
+                .add("Image2", pathImageStrings[1])
+                .add("Image3", pathImageStrings[2])
+                .add("Image4", pathImageStrings[3])
+                .add("Image5", pathImageStrings[4])
+                .add("Image6", pathImageStrings[5])
+                .add("Image7", pathImageStrings[6])
+                .add("Image8", pathImageStrings[7])
+                .add("Image9", pathImageStrings[8])
+                .add("Image10", pathImageStrings[9])
+                .add("Image11", pathImageStrings[10])
+                .add("Image12", pathImageStrings[11])
+                .add("Image13", pathImageStrings[12])
+                .add("Image14", pathImageStrings[13])
+                .add("Image15", pathImageStrings[14])
+                .add("Image16", pathImageStrings[15])
+                .add("Image17", pathImageStrings[16])
+                .add("Image18", pathImageStrings[17])
+                .add("Image19", pathImageStrings[18])
+                .add("Image20", pathImageStrings[19])
+                .add("Image21", pathImageStrings[20])
+                .add("Image22", pathImageStrings[21])
+                .add("Image23", pathImageStrings[22])
+                .add("Image24", pathImageStrings[23])
+                .add("Image25", pathImageStrings[24])
+                .add("Image26", pathImageStrings[25])
+                .add("Image27", pathImageStrings[26])
+                .add("Image28", pathImageStrings[27])
+                .add("Image29", pathImageStrings[28])
+                .add("Image30", pathImageStrings[29])
+                .add("Image31", pathImageStrings[30])
+                .add("Image32", pathImageStrings[31])
+
+
+
+                .build();
+        Request.Builder builder = new Request.Builder();
+        Request request = builder.url(strURL).post(requestBody).build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+
+            }
+        });
+    }
 
 }   // Main Class
